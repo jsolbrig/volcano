@@ -38,6 +38,14 @@ import (
 func registerWebhookConfig(kubeClient *kubernetes.Clientset, config *options.Config, service *router.AdmissionService, caBundle []byte) {
 	sideEffect := v1.SideEffectClassNoneOnDryRun
 	reviewVersions := []string{"v1"}
+    objectLabelSelector := &metav1.LabelSelector{
+        MatchExpressions: []metav1.LabelSelectorRequirement{
+            {
+                Key:  "volcano.sh/job-name",
+                Operator: "Exists",
+            },
+        },
+    }
 	webhookLabelSelector := &metav1.LabelSelector{}
 	clientConfig := v1.WebhookClientConfig{
 		CABundle: caBundle,
@@ -75,6 +83,7 @@ func registerWebhookConfig(kubeClient *kubernetes.Clientset, config *options.Con
 			service.MutatingConfig.Webhooks[i].SideEffects = &sideEffect
 			service.MutatingConfig.Webhooks[i].AdmissionReviewVersions = reviewVersions
 			service.MutatingConfig.Webhooks[i].ClientConfig = clientConfig
+            service.MutatingConfig.Webhooks[i].ObjectSelector = objectLabelSelector
 			service.MutatingConfig.Webhooks[i].NamespaceSelector = webhookLabelSelector
 		}
 
@@ -92,6 +101,7 @@ func registerWebhookConfig(kubeClient *kubernetes.Clientset, config *options.Con
 			service.ValidatingConfig.Webhooks[i].SideEffects = &sideEffect
 			service.ValidatingConfig.Webhooks[i].AdmissionReviewVersions = reviewVersions
 			service.ValidatingConfig.Webhooks[i].ClientConfig = clientConfig
+            service.ValidatingConfig.Webhooks[i].ObjectSelector = objectLabelSelector
 			service.ValidatingConfig.Webhooks[i].NamespaceSelector = webhookLabelSelector
 		}
 
