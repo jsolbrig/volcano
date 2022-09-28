@@ -29,11 +29,10 @@ spec:
   names:
     kind: Job
     listKind: JobList
-    plural: jobs
+    plural: vcjobs
     shortNames:
-    - vcjob
     - vj
-    singular: job
+    singular: vcjob
   scope: Namespaced
   subresources:
     status: {}

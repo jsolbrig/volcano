@@ -12,11 +12,10 @@ spec:
   names:
     kind: Job
     listKind: JobList
-    plural: jobs
+    plural: vcjob
     shortNames:
-    - vcjob
     - vj
-    singular: job
+    singular: vcjob
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
